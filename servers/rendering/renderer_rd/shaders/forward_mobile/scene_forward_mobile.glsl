@@ -958,8 +958,8 @@ layout(location = 14) in vec2 point_coord_interp;
 #define inv_projection_matrix scene_data.inv_projection_matrix
 #endif
 
-#if defined(ENABLE_SSS) && defined(ENABLE_TRANSMITTANCE)
-//both required for transmittance to be enabled
+#if (defined(ENABLE_SSS) && defined(ENABLE_TRANSMITTANCE)) || defined(LIGHT_TRANSMITTANCE_Z_USED)
+//both required for transmittance to be enabled, custom light code can read thickness on its own
 #define LIGHT_TRANSMITTANCE_USED
 #endif
 
