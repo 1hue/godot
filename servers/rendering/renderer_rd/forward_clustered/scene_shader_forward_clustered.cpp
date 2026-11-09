@@ -65,6 +65,7 @@ void SceneShaderForwardClustered::ShaderData::set_code(const String &p_code) {
 	uses_blend_alpha = false;
 	uses_depth_prepass_alpha = false;
 	uses_discard = false;
+	uses_fade_hash = false;
 	uses_roughness = false;
 	uses_normal = false;
 	uses_tangent = false;
@@ -128,6 +129,7 @@ void SceneShaderForwardClustered::ShaderData::set_code(const String &p_code) {
 	actions.usage_flag_pointers["ALPHA_ANTIALIASING_EDGE"] = &uses_alpha_antialiasing;
 	actions.usage_flag_pointers["ALPHA_TEXTURE_COORDINATE"] = &uses_alpha_antialiasing;
 	actions.render_mode_flags["depth_prepass_alpha"] = &uses_depth_prepass_alpha;
+	actions.render_mode_flags["fade_hash"] = &uses_fade_hash;
 
 	actions.usage_flag_pointers["SSS_STRENGTH"] = &uses_sss;
 	actions.usage_flag_pointers["SSS_TRANSMITTANCE_DEPTH"] = &uses_transmittance;
@@ -208,6 +210,8 @@ void SceneShaderForwardClustered::ShaderData::set_code(const String &p_code) {
 	uses_normal |= uses_bent_normal_map;
 	uses_tangent |= uses_normal_map;
 	uses_tangent |= uses_bent_normal_map;
+	// Fade hash discards - keeps the material out of the shared depth and shadow material
+	uses_discard |= uses_fade_hash;
 
 	stencil_enabled = stencil_referencei != -1;
 	stencil_flags = stencil_readi | stencil_writei | stencil_write_depth_faili;
@@ -877,6 +881,7 @@ void SceneShaderForwardClustered::init(const String p_defines) {
 		actions.render_mode_defines["cull_disabled"] = "#define DO_SIDE_CHECK\n";
 		actions.render_mode_defines["particle_trails"] = "#define USE_PARTICLE_TRAILS\n";
 		actions.render_mode_defines["depth_prepass_alpha"] = "#define USE_OPAQUE_PREPASS\n";
+		actions.render_mode_defines["fade_hash"] = "#define FADE_HASH_USED\n#define DISCARD_USED\n";
 
 		actions.render_mode_defines["depth_draw_never"] = "#define DEPTH_DRAW_NEVER_USED\n";
 		actions.render_mode_defines["depth_draw_always"] = "#define DEPTH_DRAW_ALWAYS_USED\n";
