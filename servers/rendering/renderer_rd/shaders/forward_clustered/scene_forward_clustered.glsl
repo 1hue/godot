@@ -1039,6 +1039,14 @@ layout(location = 2) out vec2 motion_vector;
 
 #include "../scene_forward_aa_inc.glsl"
 
+#ifdef FADE_HASH_USED
+// Return threshold for hashed fade - interleaved gradient noise, moving each frame under TAA or FSR2 so they resolve it to a smooth blend
+float fade_hash_threshold() {
+	vec2 pos = gl_FragCoord.xy + vec2(scene_data_block.data.taa_frame_count * 5.588238);
+	return fract(52.9829189 * fract(dot(pos, vec2(0.06711056, 0.00583715))));
+}
+#endif
+
 #if !defined(MODE_RENDER_DEPTH) && !defined(MODE_UNSHADED)
 
 // Default to SPECULAR_SCHLICK_GGX.
@@ -1214,6 +1222,11 @@ void fragment_shader(in SceneData scene_data) {
 	float ao_light_affect = 0.0;
 
 	float alpha_highp = float(instances.data[instance_index].flags >> INSTANCE_FLAGS_FADE_SHIFT) / float(255.0);
+#ifdef FADE_HASH_USED
+	// Hashed fade replaces blending - material alpha starts opaque
+	float fade_hash_alpha = alpha_highp;
+	alpha_highp = 1.0;
+#endif
 
 #ifdef TANGENT_USED
 	vec3 binormal = binormal_interp;
@@ -1342,6 +1355,13 @@ void fragment_shader(in SceneData scene_data) {
 #ifdef NORMAL_USED
 	vec3 geo_normal = normalize(normal);
 #endif // NORMAL_USED
+
+#if defined(FADE_HASH_USED) && !defined(MODE_RENDER_MATERIAL)
+	// Shadow passes compute fade against the light's camera
+	if (!bool(scene_data.flags & SCENE_DATA_FLAGS_IN_SHADOW_PASS) && fade_hash_alpha < fade_hash_threshold()) {
+		discard;
+	}
+#endif
 
 #ifndef USE_SHADOW_TO_OPACITY
 

@@ -1160,7 +1160,8 @@ void RenderForwardClustered::_fill_render_list(RenderListType p_render_list, con
 				bool force_alpha = false;
 #endif
 
-				if (fade_alpha < FADE_ALPHA_PASS_THRESHOLD) {
+				// Fade hash materials fade by discard in the opaque pass - keeps depth and motion vectors for temporal upscalers
+				if (fade_alpha < FADE_ALPHA_PASS_THRESHOLD && !surf->shader->uses_fade_hash) {
 					force_alpha = true;
 				}
 
