@@ -247,6 +247,8 @@ public:
 		bool uses_alpha_antialiasing = false;
 		bool uses_depth_prepass_alpha = false;
 		bool uses_discard = false;
+		/** Visibility range fade and transparency by hashed discard in the opaque pass */
+		bool uses_fade_hash = false;
 		bool uses_roughness = false;
 		bool uses_normal = false;
 		bool uses_tangent = false;
