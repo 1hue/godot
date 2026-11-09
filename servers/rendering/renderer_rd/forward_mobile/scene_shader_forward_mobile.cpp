@@ -702,6 +702,7 @@ void SceneShaderForwardMobile::init(const String p_defines) {
 		actions.renames["SSS_STRENGTH"] = "sss_strength_highp";
 		actions.renames["SSS_TRANSMITTANCE_COLOR"] = "transmittance_color_highp";
 		actions.renames["SSS_TRANSMITTANCE_DEPTH"] = "transmittance_depth_highp";
+		actions.renames["TRANSMITTANCE_Z"] = "float(transmittance_z)";
 		actions.renames["SSS_TRANSMITTANCE_BOOST"] = "transmittance_boost_highp";
 		actions.renames["BACKLIGHT"] = "backlight_highp";
 		actions.renames["AO"] = "ao_highp";
@@ -786,6 +787,7 @@ void SceneShaderForwardMobile::init(const String p_defines) {
 
 		actions.usage_defines["SSS_STRENGTH"] = "#define ENABLE_SSS\n";
 		actions.usage_defines["SSS_TRANSMITTANCE_DEPTH"] = "#define ENABLE_TRANSMITTANCE\n";
+		actions.usage_defines["TRANSMITTANCE_Z"] = "#define LIGHT_TRANSMITTANCE_Z_USED\n";
 		actions.usage_defines["BACKLIGHT"] = "#define LIGHT_BACKLIGHT_USED\n";
 		actions.usage_defines["SCREEN_UV"] = "#define SCREEN_UV_USED\n";
 
