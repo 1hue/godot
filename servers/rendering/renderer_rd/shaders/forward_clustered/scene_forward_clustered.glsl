@@ -985,8 +985,8 @@ layout(location = 14) in vec2 point_coord_interp;
 
 #define global_time scene_data_block.data.time
 
-#if defined(ENABLE_SSS) && defined(ENABLE_TRANSMITTANCE)
-//both required for transmittance to be enabled
+#if (defined(ENABLE_SSS) && defined(ENABLE_TRANSMITTANCE)) || defined(LIGHT_THICKNESS_USED)
+//both required for transmittance to be enabled, custom light code can read thickness on its own
 #define LIGHT_TRANSMITTANCE_USED
 #endif
 

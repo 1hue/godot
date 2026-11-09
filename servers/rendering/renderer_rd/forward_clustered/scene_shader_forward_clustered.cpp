@@ -767,6 +767,7 @@ void SceneShaderForwardClustered::init(const String p_defines) {
 		actions.renames["SSS_STRENGTH"] = "sss_strength";
 		actions.renames["SSS_TRANSMITTANCE_COLOR"] = "transmittance_color";
 		actions.renames["SSS_TRANSMITTANCE_DEPTH"] = "transmittance_depth";
+		actions.renames["SHADOW_THICKNESS"] = "float(transmittance_z)";
 		actions.renames["SSS_TRANSMITTANCE_BOOST"] = "transmittance_boost";
 		actions.renames["BACKLIGHT"] = "backlight";
 		actions.renames["AO"] = "ao";
@@ -851,6 +852,7 @@ void SceneShaderForwardClustered::init(const String p_defines) {
 
 		actions.usage_defines["SSS_STRENGTH"] = "#define ENABLE_SSS\n";
 		actions.usage_defines["SSS_TRANSMITTANCE_DEPTH"] = "#define ENABLE_TRANSMITTANCE\n";
+		actions.usage_defines["SHADOW_THICKNESS"] = "#define LIGHT_THICKNESS_USED\n";
 		actions.usage_defines["BACKLIGHT"] = "#define LIGHT_BACKLIGHT_USED\n";
 		actions.usage_defines["SCREEN_UV"] = "#define SCREEN_UV_USED\n";
 
